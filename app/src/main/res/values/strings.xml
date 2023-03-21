@@ -2,4 +2,7 @@
     <string name="app_name">台北市立動物園</string>
     <string name="drawer">選單</string>
     <string name="reversed">保留</string>
+
+    <!-- Home Screen -->
+    <string name="area_closed_empty">無休館資訊</string>
 </resources>
