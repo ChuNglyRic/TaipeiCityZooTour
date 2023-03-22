@@ -12,10 +12,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.chunglyric.taipeicityzootour.R
 import com.chunglyric.taipeicityzootour.data.guides.impl.guide1
 import com.chunglyric.taipeicityzootour.model.Guide
@@ -23,11 +24,11 @@ import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 
 @Composable
 fun GuideImage(modifier: Modifier = Modifier) {
-    Box(contentAlignment = Alignment.Center) {
+    Box(contentAlignment = Alignment.Center, modifier = modifier) {
         Image(
             painter = painterResource(id = R.drawable.noimage),
             contentDescription = null, // decorative
-            modifier = modifier
+            modifier = Modifier
                 .size(128.dp, 128.dp)
                 .clip(MaterialTheme.shapes.small)
         )
@@ -35,9 +36,10 @@ fun GuideImage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun GuideTitle(guide: Guide) {
+fun GuideTitle(guide: Guide, modifier: Modifier = Modifier) {
     Text(
         text = guide.name,
+        modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
@@ -45,19 +47,27 @@ fun GuideTitle(guide: Guide) {
 }
 
 @Composable
-fun InfoAndMemo(
+fun GuideInfo(
     guide: Guide,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = guide.info,
             color = Color.DarkGray,
             maxLines = 2,
             style = MaterialTheme.typography.bodyMedium
         )
-        Spacer(modifier = Modifier.height(8.dp))
+    }
+
+}
+
+@Composable
+fun GuideMemo(
+    guide: Guide,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier) {
         Text(
             text = guide.memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
             color = Color.DarkGray,
@@ -71,35 +81,73 @@ fun InfoAndMemo(
 fun ForwardButton(
     modifier: Modifier = Modifier
 ) {
-    IconButton(
-        onClick = {},
-        modifier = modifier
-    ) {
-        Icon(
-            imageVector = Icons.Default.KeyboardArrowRight,
-            contentDescription = null
-        )
-    }
+    Icon(
+        modifier = modifier,
+        imageVector = Icons.Default.KeyboardArrowRight,
+        contentDescription = null
+    )
 }
 
 @Composable
 fun AreaGuideCard(
     guide: Guide,
+    modifier: Modifier = Modifier
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        GuideImage(Modifier.padding(4.dp))
-        Column(
+    ConstraintLayout(modifier = modifier.fillMaxWidth()) {
+        val (image, right, group, title, info, memo, forward) = createRefs()
+
+        GuideImage(
             modifier = Modifier
-                .weight(1f)
-                .padding(vertical = 2.dp)
-        ) {
-            GuideTitle(guide)
-            InfoAndMemo(guide)
-        }
-        ForwardButton(
-            modifier = Modifier
-                .clearAndSetSemantics {}
+                .padding(4.dp)
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
         )
+        ConstraintLayout(
+            modifier = Modifier.constrainAs(right) {
+                centerVerticallyTo(parent)
+                start.linkTo(image.end)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+            }
+        ) {
+            ConstraintLayout(
+                modifier = Modifier.constrainAs(group) {
+                    start.linkTo(parent.start)
+                    end.linkTo(forward.start)
+                    width = Dimension.fillToConstraints
+                }
+            ) {
+                GuideTitle(
+                    guide = guide,
+                    modifier = Modifier.constrainAs(title) {
+                        top.linkTo(parent.top)
+                    }
+                )
+
+                GuideInfo(
+                    guide = guide,
+                    modifier = Modifier.constrainAs(info) {
+                        top.linkTo(title.bottom, margin = 8.dp)
+                    }
+                )
+
+                GuideMemo(
+                    guide = guide,
+                    modifier = Modifier.constrainAs(memo) {
+                        top.linkTo(info.bottom, margin = 8.dp)
+                    }
+                )
+            }
+
+            ForwardButton(
+                modifier = Modifier.constrainAs(forward) {
+                    centerVerticallyTo(parent)
+                    end.linkTo(parent.end)
+                }
+            )
+        }
     }
 }
 
