@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.chunglyric.taipeicityzootour.R
-import com.chunglyric.taipeicityzootour.data.guides.impl.guide1
-import com.chunglyric.taipeicityzootour.model.Guide
+import com.chunglyric.taipeicityzootour.data.guides.impl.areaGuide1
+import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 
 @Composable
@@ -36,9 +36,12 @@ fun GuideImage(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun GuideTitle(guide: Guide, modifier: Modifier = Modifier) {
+fun GuideTitle(
+    guide: AreaGuide.Metadata.Guide,
+    modifier: Modifier = Modifier
+) {
     Text(
-        text = guide.name,
+        text = guide.e_name,
         modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
         maxLines = 1,
@@ -48,12 +51,12 @@ fun GuideTitle(guide: Guide, modifier: Modifier = Modifier) {
 
 @Composable
 fun GuideInfo(
-    guide: Guide,
+    guide: AreaGuide.Metadata.Guide,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
         Text(
-            text = guide.info,
+            text = guide.e_info,
             color = Color.DarkGray,
             maxLines = 2,
             style = MaterialTheme.typography.bodyMedium
@@ -64,12 +67,12 @@ fun GuideInfo(
 
 @Composable
 fun GuideMemo(
-    guide: Guide,
+    guide: AreaGuide.Metadata.Guide,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
         Text(
-            text = guide.memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
+            text = guide.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
             color = Color.DarkGray,
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium
@@ -90,7 +93,7 @@ fun ForwardButton(
 
 @Composable
 fun AreaGuideCard(
-    guide: Guide,
+    guide: AreaGuide.Metadata.Guide,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
@@ -156,7 +159,7 @@ fun AreaGuideCard(
 fun AreaGuidePreview() {
     TaipeiCityZooTourTheme {
         Surface {
-            AreaGuideCard(guide1)
+            AreaGuideCard(areaGuide1)
         }
     }
 }

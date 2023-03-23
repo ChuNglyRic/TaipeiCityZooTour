@@ -6,7 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.chunglyric.taipeicityzootour.ui.home.HomeScreen
+import com.chunglyric.taipeicityzootour.data.guides.impl.ApiGuidesRepository
+import com.chunglyric.taipeicityzootour.service.ApiService
+import com.chunglyric.taipeicityzootour.ui.home.HomeRoute
+import com.chunglyric.taipeicityzootour.ui.home.HomeViewModel
 
 @Composable
 fun TaipeiCityZooTourNavGraph(
@@ -20,7 +23,10 @@ fun TaipeiCityZooTourNavGraph(
         modifier = modifier
     ) {
         composable(TaipeiCityZooTourDestinations.HOME_ROUTE) {
-            HomeScreen()
+            val apiService = ApiService.getInstance()
+            val apiGuidesRepository = ApiGuidesRepository(apiService)
+            val homeViewModel = HomeViewModel(apiGuidesRepository)
+            HomeRoute(homeViewModel = homeViewModel)
         }
     }
 }
