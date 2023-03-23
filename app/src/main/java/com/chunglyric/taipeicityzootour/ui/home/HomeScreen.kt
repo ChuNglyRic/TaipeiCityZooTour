@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.chunglyric.taipeicityzootour.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,12 +86,32 @@ fun HomeScreen(uiStates: HomeUiStates) {
             },
             emptyContent = { FullScreenLoading() },
             content = {
-                Text(
-                    modifier = Modifier
-                        .padding(padding)
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    text = stringResource(id = R.string.reversed)
-                )
+                if (uiStates is HomeUiStates.HasData) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(padding)
+                            .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    ) {
+                        items(uiStates.guidesCache.areaGuides) { item ->
+                            AreaGuideCard(
+                                guide = item,
+                                modifier = Modifier.padding(8.dp)
+                            )
+                            if (item != uiStates.guidesCache.areaGuides.last()) Divider(thickness = 2.dp)
+                        }
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .wrapContentSize(Alignment.Center)
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(padding),
+                            text = stringResource(id = R.string.reversed)
+                        )
+                    }
+                }
             }
         )
     }
