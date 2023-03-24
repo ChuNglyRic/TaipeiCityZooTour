@@ -1,6 +1,7 @@
 package com.chunglyric.taipeicityzootour.ui.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.chunglyric.taipeicityzootour.R
+import com.chunglyric.taipeicityzootour.ui.TaipeiCityZooTourDestinations
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +63,10 @@ private fun LoadingContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(uiStates: HomeUiStates) {
+fun HomeScreen(
+    uiStates: HomeUiStates,
+    navController: NavHostController
+) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
 
@@ -85,7 +91,11 @@ fun HomeScreen(uiStates: HomeUiStates) {
                         items(uiStates.guidesCache.areaGuides) { item ->
                             AreaGuideCard(
                                 guide = item,
-                                modifier = Modifier.padding(8.dp)
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clickable {
+                                        navController.navigate("${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/$item")
+                                    }
                             )
                             if (item != uiStates.guidesCache.areaGuides.last()) Divider(thickness = 2.dp)
                         }

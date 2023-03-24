@@ -11,8 +11,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        val appContainer = (application as TaipeiCityZooTourApplication).container
         setContent {
-            TaipeiCityZooTourApp()
+            TaipeiCityZooTourApp(appContainer = appContainer)
         }
     }
 }

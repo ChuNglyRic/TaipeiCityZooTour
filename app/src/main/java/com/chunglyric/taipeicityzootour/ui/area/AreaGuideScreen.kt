@@ -166,7 +166,10 @@ private fun AreaGuideScreenContent(
 
 @ExperimentalMaterial3Api
 @Composable
-fun AreaGuideScreen(guide: AreaGuide.Metadata.Guide) {
+fun AreaGuideScreen(
+    guide: AreaGuide.Metadata.Guide,
+    onGoBack: () -> Unit
+) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
 
@@ -175,7 +178,7 @@ fun AreaGuideScreen(guide: AreaGuide.Metadata.Guide) {
             TopAppBar(
                 title = { Text(text = guide.e_name) },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onGoBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = null
@@ -202,7 +205,10 @@ fun AreaGuideScreen(guide: AreaGuide.Metadata.Guide) {
 fun AreaGuidePreview() {
     TaipeiCityZooTourTheme {
         Surface {
-            AreaGuideScreen(guide = areaGuide1)
+            AreaGuideScreen(
+                guide = areaGuide1,
+                onGoBack = {}
+            )
         }
     }
 }

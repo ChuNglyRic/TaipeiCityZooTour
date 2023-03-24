@@ -2,6 +2,7 @@ package com.chunglyric.taipeicityzootour.ui.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.chunglyric.taipeicityzootour.data.ResponseStatus
 import com.chunglyric.taipeicityzootour.data.guides.impl.ApiGuidesRepository
@@ -74,6 +75,17 @@ class HomeViewModel(
                 viewModelStates.update {
                     it.copy(isLoading = false)
                 }
+            }
+        }
+    }
+
+    companion object {
+        fun provideFactory(
+            apiGuidesRepository: ApiGuidesRepository
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return HomeViewModel(apiGuidesRepository) as T
             }
         }
     }
