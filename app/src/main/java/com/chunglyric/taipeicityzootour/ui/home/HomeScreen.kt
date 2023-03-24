@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chunglyric.taipeicityzootour.R
+import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,17 +58,6 @@ private fun LoadingContent(
     }
 }
 
-@Composable
-private fun FullScreenLoading() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(uiStates: HomeUiStates) {
@@ -84,7 +74,7 @@ fun HomeScreen(uiStates: HomeUiStates) {
                 is HomeUiStates.HasData -> false
                 is HomeUiStates.NoData -> uiStates.isLoading
             },
-            emptyContent = { FullScreenLoading() },
+            emptyContent = { CenterLoading() },
             content = {
                 if (uiStates is HomeUiStates.HasData) {
                     LazyColumn(
@@ -127,6 +117,6 @@ fun FullScreenLoadingPreview() {
             HomeTopAppBar()
         }
     ) {
-        FullScreenLoading()
+        CenterLoading()
     }
 }

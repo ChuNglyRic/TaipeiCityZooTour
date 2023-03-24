@@ -25,6 +25,7 @@ import com.chunglyric.taipeicityzootour.R
 import com.chunglyric.taipeicityzootour.data.guides.impl.areaGuide1
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
+import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 
 @Composable
 fun NoImage() {
@@ -54,7 +55,7 @@ fun GuideImage(
                 .size(128.dp, 128.dp)
                 .clip(MaterialTheme.shapes.extraSmall),
             contentScale = ContentScale.Crop,
-            loading = placeholder { NoImage() },
+            loading = placeholder { CenterLoading() },
             failure = placeholder { NoImage() }
         )
     }
