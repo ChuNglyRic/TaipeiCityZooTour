@@ -5,4 +5,7 @@
 
     <!-- Home Screen -->
     <string name="area_closed_empty">無休館資訊</string>
+
+    <!-- Area Guide Screen -->
+    <string name="open_url">在網頁開啟</string>
 </resources>

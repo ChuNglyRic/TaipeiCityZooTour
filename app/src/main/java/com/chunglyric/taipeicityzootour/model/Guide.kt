@@ -12,10 +12,12 @@ data class AreaGuide(
     ) {
         data class Guide(
             val _id: Int,
+            val e_category: String,
             val e_info: String,
             val e_memo: String,
             val e_name: String,
             val e_pic_url: String,
+            val e_url: String
         )
     }
 }
