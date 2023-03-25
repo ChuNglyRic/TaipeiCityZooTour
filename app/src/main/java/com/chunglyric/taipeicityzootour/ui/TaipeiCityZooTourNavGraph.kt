@@ -33,7 +33,10 @@ fun TaipeiCityZooTourNavGraph(
     ) {
         composable(TaipeiCityZooTourDestinations.HOME_ROUTE) {
             val homeViewModel: HomeViewModel = viewModel(
-                factory = HomeViewModel.provideFactory(appContainer.apiGuidesRepository)
+                factory = HomeViewModel.provideFactory(
+                    appContainer.apiGuidesRepository,
+                    appContainer.guidesCache
+                )
             )
 
             HomeRoute(

@@ -1,7 +1,6 @@
 package com.chunglyric.taipeicityzootour.model
 
-class GuidesCache(
-    private val areaDataList: List<AreaGuide.Data>
-) {
-    val areaData: List<AreaGuide.Data> get() = areaDataList
+class GuidesCache {
+    var areaData: List<AreaGuide.Data>? = null
+    var animalData: List<AnimalGuide.Data>? = null
 }
