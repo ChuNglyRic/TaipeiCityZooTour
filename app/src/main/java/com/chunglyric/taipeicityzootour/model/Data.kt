@@ -53,3 +53,23 @@ class AreaGuideType : NavType<AreaGuide.Data>(isNullableAllowed = false) {
         bundle.putParcelable(key, value)
     }
 }
+
+
+data class AnimalGuide(
+    val result: Metadata<Data>
+) {
+    data class Data(
+        val _id: Int,
+        val a_alsoknown: String,
+        val a_behavior: String,
+        val a_crisis: String,
+        val a_distribution: String,
+        val a_feature: String,
+        val a_habitat: String,
+        val a_name_ch: String,
+        val a_name_en: String,
+        val a_pic01_alt: String,
+        val a_pic01_url: String,
+        val a_update: String,
+    )
+}
