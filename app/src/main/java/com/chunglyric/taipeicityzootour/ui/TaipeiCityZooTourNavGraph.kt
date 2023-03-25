@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.chunglyric.taipeicityzootour.data.AppContainer
-import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
+import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuideType
 import com.chunglyric.taipeicityzootour.ui.area.AreaGuideScreen
@@ -53,7 +53,7 @@ fun TaipeiCityZooTourNavGraph(
             }
 
             AreaGuideScreen(
-                data = areaData ?: areaData1,
+                data = areaData ?: invalidAreaData,
                 onGoBack = { navController.popBackStack() }
             )
         }

@@ -2,6 +2,18 @@ package com.chunglyric.taipeicityzootour.data.guides.impl
 
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 
+const val INVALID_AREA_DATA_ID = -1
+
+val invalidAreaData = AreaGuide.Data(
+    _id = INVALID_AREA_DATA_ID,
+    e_category = "",
+    e_info = "請按返回回到上一頁",
+    e_memo = "",
+    e_name = "找不到此資料",
+    e_pic_url = "",
+    e_url = ""
+)
+
 val areaData1 = AreaGuide.Data(
     _id = 1,
     e_category = "戶外區",

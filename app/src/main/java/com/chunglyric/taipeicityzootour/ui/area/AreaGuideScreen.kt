@@ -28,7 +28,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.chunglyric.taipeicityzootour.R
+import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_AREA_DATA_ID
 import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
+import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.ui.home.NoImage
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
@@ -47,7 +49,7 @@ fun AreaGuideImage(
             .aspectRatio(3f / 2f)
     ) {
         GlideImage(
-            model = data.e_pic_url,
+            model = data.e_pic_url.ifEmpty { R.drawable.noimage },
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
@@ -124,7 +126,7 @@ private fun AreaGuideScreenContent(
                         }
                 )
 
-                Text(
+                if (data._id != INVALID_AREA_DATA_ID) Text(
                     text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
@@ -133,7 +135,7 @@ private fun AreaGuideScreenContent(
                         }
                 )
 
-                Text(
+                if (data._id != INVALID_AREA_DATA_ID) Text(
                     text = data.e_category,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
@@ -142,7 +144,7 @@ private fun AreaGuideScreenContent(
                         }
                 )
 
-                AreaGuideUrlText(
+                if (data._id != INVALID_AREA_DATA_ID) AreaGuideUrlText(
                     data = data,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
@@ -152,7 +154,7 @@ private fun AreaGuideScreenContent(
                         }
                 )
 
-                Divider(
+                if (data._id != INVALID_AREA_DATA_ID) Divider(
                     thickness = 24.dp,
                     modifier = Modifier
                         .constrainAs(divider) {
@@ -207,6 +209,20 @@ fun AreaGuidePreview() {
         Surface {
             AreaGuideScreen(
                 data = areaData1,
+                onGoBack = {}
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview("Invalid area guide screen")
+@Composable
+fun InvalidAreaGuidePreview() {
+    TaipeiCityZooTourTheme {
+        Surface {
+            AreaGuideScreen(
+                data = invalidAreaData,
                 onGoBack = {}
             )
         }
