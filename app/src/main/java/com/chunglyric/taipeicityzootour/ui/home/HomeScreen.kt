@@ -88,16 +88,16 @@ fun HomeScreen(
                             .padding(padding)
                             .nestedScroll(scrollBehavior.nestedScrollConnection)
                     ) {
-                        items(uiStates.guidesCache.areaGuides) { item ->
+                        items(uiStates.guidesCache.areaData) { item ->
                             AreaGuideCard(
-                                guide = item,
+                                data = item,
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .clickable {
                                         navController.navigate("${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/$item")
                                     }
                             )
-                            if (item != uiStates.guidesCache.areaGuides.last()) Divider(thickness = 2.dp)
+                            if (item != uiStates.guidesCache.areaData.last()) Divider(thickness = 2.dp)
                         }
                     }
                 } else {

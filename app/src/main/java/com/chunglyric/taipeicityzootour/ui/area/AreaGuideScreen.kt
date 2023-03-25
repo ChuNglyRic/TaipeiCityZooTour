@@ -28,7 +28,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.chunglyric.taipeicityzootour.R
-import com.chunglyric.taipeicityzootour.data.guides.impl.areaGuide1
+import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.ui.home.NoImage
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
@@ -37,7 +37,7 @@ import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AreaGuideImage(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -47,7 +47,7 @@ fun AreaGuideImage(
             .aspectRatio(3f / 2f)
     ) {
         GlideImage(
-            model = guide.e_pic_url,
+            model = data.e_pic_url,
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
@@ -60,7 +60,7 @@ fun AreaGuideImage(
 
 @Composable
 fun AreaGuideUrlText(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
@@ -72,8 +72,8 @@ fun AreaGuideUrlText(
             end = str.length
         )
         addStringAnnotation(
-            tag = guide.e_name,
-            annotation = guide.e_url,
+            tag = data.e_name,
+            annotation = data.e_url,
             start = 0,
             end = str.length
         )
@@ -86,7 +86,7 @@ fun AreaGuideUrlText(
         modifier = modifier,
         onClick = {
             annotatedLinkString
-                .getStringAnnotations(guide.e_name, it, it)
+                .getStringAnnotations(data.e_name, it, it)
                 .firstOrNull()?.let { stringAnnotation ->
                     uriHandler.openUri(stringAnnotation.item)
                 }
@@ -96,7 +96,7 @@ fun AreaGuideUrlText(
 
 @Composable
 private fun AreaGuideScreenContent(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -107,7 +107,7 @@ private fun AreaGuideScreenContent(
                 val (image, info, memo, category, url, divider) = createRefs()
 
                 AreaGuideImage(
-                    guide,
+                    data,
                     Modifier
                         .padding(start = 8.dp, end = 8.dp)
                         .constrainAs(image) {
@@ -116,7 +116,7 @@ private fun AreaGuideScreenContent(
                 )
 
                 Text(
-                    text = guide.e_info,
+                    text = data.e_info,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
                         .constrainAs(info) {
@@ -125,7 +125,7 @@ private fun AreaGuideScreenContent(
                 )
 
                 Text(
-                    text = guide.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
+                    text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
                         .constrainAs(memo) {
@@ -134,7 +134,7 @@ private fun AreaGuideScreenContent(
                 )
 
                 Text(
-                    text = guide.e_category,
+                    text = data.e_category,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
                         .constrainAs(category) {
@@ -143,7 +143,7 @@ private fun AreaGuideScreenContent(
                 )
 
                 AreaGuideUrlText(
-                    guide = guide,
+                    data = data,
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp)
                         .constrainAs(url) {
@@ -167,7 +167,7 @@ private fun AreaGuideScreenContent(
 @ExperimentalMaterial3Api
 @Composable
 fun AreaGuideScreen(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     onGoBack: () -> Unit
 ) {
     val topAppBarState = rememberTopAppBarState()
@@ -176,7 +176,7 @@ fun AreaGuideScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = guide.e_name) },
+                title = { Text(text = data.e_name) },
                 navigationIcon = {
                     IconButton(onClick = onGoBack) {
                         Icon(
@@ -191,7 +191,7 @@ fun AreaGuideScreen(
     ) { padding ->
         Modifier.padding(padding)
         AreaGuideScreenContent(
-            guide = guide,
+            data = data,
             modifier = Modifier
                 .padding(padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -206,7 +206,7 @@ fun AreaGuidePreview() {
     TaipeiCityZooTourTheme {
         Surface {
             AreaGuideScreen(
-                guide = areaGuide1,
+                data = areaData1,
                 onGoBack = {}
             )
         }

@@ -22,7 +22,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.chunglyric.taipeicityzootour.R
-import com.chunglyric.taipeicityzootour.data.guides.impl.areaGuide1
+import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
@@ -41,7 +41,7 @@ fun NoImage() {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GuideImage(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -49,7 +49,7 @@ fun GuideImage(
         modifier = modifier
     ) {
         GlideImage(
-            model = guide.e_pic_url,
+            model = data.e_pic_url,
             contentDescription = null,
             modifier = Modifier
                 .size(128.dp, 128.dp)
@@ -63,11 +63,11 @@ fun GuideImage(
 
 @Composable
 fun GuideTitle(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = guide.e_name,
+        text = data.e_name,
         modifier = modifier,
         style = MaterialTheme.typography.titleLarge,
         maxLines = 1,
@@ -77,12 +77,12 @@ fun GuideTitle(
 
 @Composable
 fun GuideInfo(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
         Text(
-            text = guide.e_info,
+            text = data.e_info,
             color = Color.DarkGray,
             maxLines = 2,
             style = MaterialTheme.typography.bodyMedium
@@ -93,12 +93,12 @@ fun GuideInfo(
 
 @Composable
 fun GuideMemo(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
         Text(
-            text = guide.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
+            text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
             color = Color.DarkGray,
             maxLines = 1,
             style = MaterialTheme.typography.bodyMedium
@@ -119,14 +119,14 @@ fun ForwardButton(
 
 @Composable
 fun AreaGuideCard(
-    guide: AreaGuide.Metadata.Guide,
+    data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (image, right, group, title, info, memo, forward) = createRefs()
 
         GuideImage(
-            guide = guide,
+            data = data,
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(image) {
@@ -150,21 +150,21 @@ fun AreaGuideCard(
                 }
             ) {
                 GuideTitle(
-                    guide = guide,
+                    data = data,
                     modifier = Modifier.constrainAs(title) {
                         top.linkTo(parent.top)
                     }
                 )
 
                 GuideInfo(
-                    guide = guide,
+                    data = data,
                     modifier = Modifier.constrainAs(info) {
                         top.linkTo(title.bottom, margin = 8.dp)
                     }
                 )
 
                 GuideMemo(
-                    guide = guide,
+                    data = data,
                     modifier = Modifier.constrainAs(memo) {
                         top.linkTo(info.bottom, margin = 8.dp)
                     }
@@ -186,7 +186,7 @@ fun AreaGuideCard(
 fun AreaGuidePreview() {
     TaipeiCityZooTourTheme {
         Surface {
-            AreaGuideCard(areaGuide1)
+            AreaGuideCard(areaData1)
         }
     }
 }

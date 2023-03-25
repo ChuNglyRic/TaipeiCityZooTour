@@ -1,7 +1,7 @@
 package com.chunglyric.taipeicityzootour.model
 
 class GuidesCache(
-    private val areaGuideList: List<AreaGuide.Metadata.Guide>
+    private val areaDataList: List<AreaGuide.Data>
 ) {
-    val areaGuides: List<AreaGuide.Metadata.Guide> get() = areaGuideList
+    val areaData: List<AreaGuide.Data> get() = areaDataList
 }

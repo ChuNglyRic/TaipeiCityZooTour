@@ -61,7 +61,7 @@ class HomeViewModel(
                     when (responseStatus) {
                         is ResponseStatus.Success -> {
                             it.copy(
-                                guidesCache = GuidesCache(areaGuideList = responseStatus.data.result.results),
+                                guidesCache = GuidesCache(areaDataList = responseStatus.data.result.results),
                                 isLoading = false
                             )
                         }

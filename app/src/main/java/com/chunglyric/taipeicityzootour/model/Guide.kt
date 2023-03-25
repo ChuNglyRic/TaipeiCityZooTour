@@ -8,47 +8,48 @@ import androidx.navigation.NavType
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
 
+data class Metadata<T>(
+    val count: Int,
+    val limit: Int,
+    val offset: Int,
+    val results: List<T>,
+    val sort: String
+)
+
 data class AreaGuide(
-    val result: Metadata
+    val result: Metadata<Data>
 ) {
-    data class Metadata(
-        val count: Int,
-        val limit: Int,
-        val offset: Int,
-        val results: List<Guide>,
-        val sort: String
-    ) {
-        @Parcelize
-        data class Guide(
-            val _id: Int,
-            val e_category: String,
-            val e_info: String,
-            val e_memo: String,
-            val e_name: String,
-            val e_pic_url: String,
-            val e_url: String
-        ) : Parcelable {
-            override fun toString(): String {
-                return Uri.encode(Gson().toJson(this))
-            }
+    @Parcelize
+    data class Data(
+        val _id: Int,
+        val e_category: String,
+        val e_info: String,
+        val e_memo: String,
+        val e_name: String,
+        val e_pic_url: String,
+        val e_url: String
+    ) : Parcelable {
+        override fun toString(): String {
+            return Uri.encode(Gson().toJson(this))
         }
     }
+
 }
 
-class AreaGuideType : NavType<AreaGuide.Metadata.Guide>(isNullableAllowed = false) {
-    override fun get(bundle: Bundle, key: String): AreaGuide.Metadata.Guide? {
+class AreaGuideType : NavType<AreaGuide.Data>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): AreaGuide.Data? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            bundle.getParcelable(key, AreaGuide.Metadata.Guide::class.java)
+            bundle.getParcelable(key, AreaGuide.Data::class.java)
         } else {
             @Suppress("DEPRECATION") bundle.getParcelable(key)
         }
     }
 
-    override fun parseValue(value: String): AreaGuide.Metadata.Guide {
-        return Gson().fromJson(value, AreaGuide.Metadata.Guide::class.java)
+    override fun parseValue(value: String): AreaGuide.Data {
+        return Gson().fromJson(value, AreaGuide.Data::class.java)
     }
 
-    override fun put(bundle: Bundle, key: String, value: AreaGuide.Metadata.Guide) {
+    override fun put(bundle: Bundle, key: String, value: AreaGuide.Data) {
         bundle.putParcelable(key, value)
     }
 }

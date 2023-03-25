@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.chunglyric.taipeicityzootour.data.AppContainer
-import com.chunglyric.taipeicityzootour.data.guides.impl.areaGuide1
+import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuideType
 import com.chunglyric.taipeicityzootour.ui.area.AreaGuideScreen
@@ -46,14 +46,14 @@ fun TaipeiCityZooTourNavGraph(
             route = "${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/{areaGuide}",
             arguments = listOf(navArgument("areaGuide") { type = AreaGuideType() })
         ) { navBackStackEntry ->
-            val areaGuide = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                navBackStackEntry.arguments?.getParcelable("areaGuide", AreaGuide.Metadata.Guide::class.java)
+            val areaData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                navBackStackEntry.arguments?.getParcelable("areaGuide", AreaGuide.Data::class.java)
             } else {
                 @Suppress("DEPRECATION") navBackStackEntry.arguments?.getParcelable("areaGuide")
             }
 
             AreaGuideScreen(
-                guide = areaGuide ?: areaGuide1,
+                data = areaData ?: areaData1,
                 onGoBack = { navController.popBackStack() }
             )
         }
