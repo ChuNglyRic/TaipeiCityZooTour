@@ -119,41 +119,43 @@ fun AreaGuideContent(data: AreaGuide.Data) {
                 }
         )
 
-        if (data._id != INVALID_AREA_DATA_ID) Text(
-            text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .constrainAs(memo) {
-                    top.linkTo(info.bottom, margin = 8.dp)
-                }
-        )
+        if (data._id != INVALID_AREA_DATA_ID){
+            Text(
+                text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .constrainAs(memo) {
+                        top.linkTo(info.bottom, margin = 8.dp)
+                    }
+            )
 
-        if (data._id != INVALID_AREA_DATA_ID) Text(
-            text = data.e_category,
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .constrainAs(category) {
-                    top.linkTo(memo.bottom)
-                }
-        )
+            Text(
+                text = data.e_category,
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .constrainAs(category) {
+                        top.linkTo(memo.bottom)
+                    }
+            )
 
-        if (data._id != INVALID_AREA_DATA_ID) AreaGuideUrlText(
-            data = data,
-            modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .constrainAs(url) {
-                    top.linkTo(memo.bottom)
-                    end.linkTo(parent.end)
-                }
-        )
+            AreaGuideUrlText(
+                data = data,
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .constrainAs(url) {
+                        top.linkTo(memo.bottom)
+                        end.linkTo(parent.end)
+                    }
+            )
 
-        if (data._id != INVALID_AREA_DATA_ID) Divider(
-            thickness = 24.dp,
-            modifier = Modifier
-                .constrainAs(divider) {
-                    top.linkTo(category.bottom, margin = 8.dp)
-                }
-        )
+            Divider(
+                thickness = 24.dp,
+                modifier = Modifier
+                    .constrainAs(divider) {
+                        top.linkTo(category.bottom, margin = 8.dp)
+                    }
+            )
+        }
     }
 }
 
