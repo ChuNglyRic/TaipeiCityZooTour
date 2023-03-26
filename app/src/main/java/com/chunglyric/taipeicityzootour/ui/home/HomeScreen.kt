@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -48,6 +52,7 @@ private fun HomeTopAppBar(
     )
 }
 
+@ExperimentalMaterialApi
 @Composable
 private fun LoadingContent(
     empty: Boolean,
@@ -61,11 +66,12 @@ private fun LoadingContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(
     uiStates: HomeUiStates,
-    navController: NavHostController
+    navController: NavHostController,
+    onRefresh: () -> Unit
 ) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
@@ -80,25 +86,42 @@ fun HomeScreen(
                 is HomeUiStates.HasData -> false
                 is HomeUiStates.NoData -> uiStates.isLoading
             },
-            emptyContent = { CenterLoading() },
+            emptyContent = {
+                CenterLoading()
+            },
             content = {
                 if (uiStates is HomeUiStates.HasData) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(padding)
-                            .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    ) {
-                        items(uiStates.guidesCache.areaData ?: emptyList()) { item ->
-                            AreaGuideCard(
-                                data = item,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clickable {
-                                        navController.navigate("${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/$item")
-                                    }
-                            )
-                            if (item != uiStates.guidesCache.areaData?.last()) Divider(thickness = 2.dp)
+                    var refreshing by remember { mutableStateOf(false) }
+                    val state = rememberPullRefreshState(
+                        refreshing = refreshing,
+                        onRefresh = {
+                            refreshing = true
+                            onRefresh()
+                            refreshing = false
                         }
+                    )
+                    Box(
+                        modifier = Modifier.pullRefresh(state = state)
+                    ) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .padding(padding)
+                                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        ) {
+                            items(uiStates.guidesCache.areaData ?: emptyList()) { item ->
+                                AreaGuideCard(
+                                    data = item,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .clickable {
+                                            navController.navigate("${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/$item")
+                                        }
+                                )
+                                if (item != uiStates.guidesCache.areaData?.last()) Divider(thickness = 2.dp)
+                            }
+                        }
+
+                        PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
                     }
                 } else {
                     Box(

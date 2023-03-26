@@ -54,7 +54,15 @@ class HomeViewModel(
         )
 
     init {
-        viewModelStates.update { it.copy(isLoading = true) }
+        refreshGuides()
+    }
+
+    fun refreshGuides() {
+        viewModelStates.update {
+            guidesCache.areaData = null
+            guidesCache.animalData = null
+            it.copy(isLoading = true)
+        }
 
         viewModelScope.launch {
             try {

@@ -13,6 +13,7 @@ fun HomeRoute(
     val uiStates by homeViewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
         uiStates = uiStates,
-        navController = navController
+        navController = navController,
+        onRefresh = { homeViewModel.refreshGuides() }
     )
 }
