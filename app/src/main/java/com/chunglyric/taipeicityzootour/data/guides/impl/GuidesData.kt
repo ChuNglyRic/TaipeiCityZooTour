@@ -1,5 +1,6 @@
 package com.chunglyric.taipeicityzootour.data.guides.impl
 
+import com.chunglyric.taipeicityzootour.model.AnimalGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 
 const val INVALID_AREA_DATA_ID = -1
@@ -22,4 +23,19 @@ val areaData1 = AreaGuide.Data(
     e_name = "臺灣動物區",
     e_pic_url = "http://www.zoo.gov.tw/iTAP/05_Exhibit/01_FormosanAnimal.jpg",
     e_url = "https://www.youtube.com/watch?v=QIUbzZ-jX_Y"
+)
+
+var animalData1 = AnimalGuide.Data(
+    _id = 1,
+    a_alsoknown = "華雞、山雞、畦雞、藍鷳、臺灣藍鷳、斯文豪氏鷴、臺灣山雞",
+    a_behavior = "為一夫多妻制，雄鳥的領域性很強，所以一個欄舍中只能圈養一隻雄鳥，否則會搏命鬥毆。",
+    a_crisis = "",
+    a_distribution = "臺灣",
+    a_feature = "1、 為臺灣特有種鳥類。\\r\\n 2、 最大的特徵就是雄鳥羽冠和背部是鮮明的白色，尾部也有兩根漂亮的白色長羽，為原住民頭上常用的飾羽。",
+    a_habitat = "原始林及成熟的次生林，出現於海拔300-2000公尺間",
+    a_name_ch = "藍腹鷴",
+    a_name_en = "Swinhoe's Pheasant",
+    a_pic01_alt = "藍腹鷴",
+    a_pic01_url = "http://www.zoo.gov.tw/iTAP/03_Animals/BirdWorld/Pheasant-S/Pheasant-S_Pic01.jpg",
+    a_update = ""
 )
