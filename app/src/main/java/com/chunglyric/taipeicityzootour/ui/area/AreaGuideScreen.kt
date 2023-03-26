@@ -95,7 +95,7 @@ fun AreaGuideUrlText(
 }
 
 @Composable
-fun AnimalGuideCard(data: AreaGuide.Data) {
+fun AreaGuideContent(data: AreaGuide.Data) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (image, info, memo, category, url, divider) = createRefs()
 
@@ -189,7 +189,7 @@ fun AreaGuideScreen(
                 .padding(padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
-            item { AnimalGuideCard(data = data) }
+            item { AreaGuideContent(data = data) }
 
             val animalDataList = guidesCache.animalData
             if (animalDataList != null) {
