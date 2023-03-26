@@ -11,6 +11,8 @@ import androidx.constraintlayout.compose.Dimension
 import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
 import com.chunglyric.taipeicityzootour.model.AnimalGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
+import com.chunglyric.taipeicityzootour.ui.utils.RebuildUri
+import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageUiState
 import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideContent
 import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideForwardButton
 import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideImage
@@ -18,6 +20,7 @@ import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideTitle
 
 @Composable
 fun AnimalGuideCard(
+    reloadImageUiState: ReloadImageUiState,
     data: AnimalGuide.Data,
     modifier: Modifier = Modifier
 ) {
@@ -25,7 +28,10 @@ fun AnimalGuideCard(
         val (image, right, group, title, info, forward) = createRefs()
 
         GuideImage(
-            url = data.a_pic01_url,
+            url = RebuildUri(
+                url = data.a_pic01_url,
+                reloadImageUiState = reloadImageUiState
+            ),
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(image) {
@@ -79,7 +85,10 @@ fun AnimalGuideCard(
 fun AnimalGuidePreview() {
     TaipeiCityZooTourTheme {
         Surface {
-            AnimalGuideCard(animalData1)
+            AnimalGuideCard(
+                data = animalData1,
+                reloadImageUiState = ReloadImageUiState()
+            )
         }
     }
 }

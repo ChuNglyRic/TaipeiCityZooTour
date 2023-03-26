@@ -18,10 +18,10 @@ import com.chunglyric.taipeicityzootour.model.AnimalGuideType
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuideType
 import com.chunglyric.taipeicityzootour.ui.animal.AnimalGuideScreen
-import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageViewModel
 import com.chunglyric.taipeicityzootour.ui.area.AreaGuideScreen
 import com.chunglyric.taipeicityzootour.ui.home.HomeRoute
 import com.chunglyric.taipeicityzootour.ui.home.HomeViewModel
+import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +64,8 @@ fun TaipeiCityZooTourNavGraph(
                 data = areaData ?: invalidAreaData,
                 guidesCache = appContainer.guidesCache,
                 onGoBack = { navController.popBackStack() },
-                navController = navController
+                navController = navController,
+                viewModel = ReloadImageViewModel()
             )
         }
 

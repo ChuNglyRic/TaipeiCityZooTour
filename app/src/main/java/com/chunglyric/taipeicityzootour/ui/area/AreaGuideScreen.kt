@@ -5,10 +5,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,12 +41,12 @@ import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.GuidesCache
 import com.chunglyric.taipeicityzootour.ui.TaipeiCityZooTourDestinations
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
-import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
-import com.chunglyric.taipeicityzootour.ui.utils.GuideNoImage
+import com.chunglyric.taipeicityzootour.ui.utils.*
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AreaGuideImage(
+    reloadImageUiState: ReloadImageUiState,
     data: AreaGuide.Data,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +55,10 @@ fun AreaGuideImage(
         modifier = modifier
     ) {
         GlideImage(
-            model = data.e_pic_url.ifEmpty { R.drawable.noimage },
+            model = RebuildUri(
+                url = data.e_pic_url,
+                reloadImageUiState = reloadImageUiState
+            ).ifEmpty { R.drawable.noimage },
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
@@ -99,11 +106,15 @@ fun AreaGuideUrlText(
 }
 
 @Composable
-fun AreaGuideContent(data: AreaGuide.Data) {
+fun AreaGuideContent(
+    data: AreaGuide.Data,
+    reloadImageUiState: ReloadImageUiState
+) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (image, info, memo, category, url, divider) = createRefs()
 
         AreaGuideImage(
+            reloadImageUiState = reloadImageUiState,
             data,
             Modifier
                 .fillMaxWidth()
@@ -163,16 +174,19 @@ fun AreaGuideContent(data: AreaGuide.Data) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun AreaGuideScreen(
     data: AreaGuide.Data,
     guidesCache: GuidesCache,
     onGoBack: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: ReloadImageViewModel = ReloadImageViewModel()
 ) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+    val reloadImageUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -191,29 +205,45 @@ fun AreaGuideScreen(
         }
     ) { padding ->
         Modifier.padding(padding)
-        LazyColumn(
-            modifier = Modifier
-                .padding(padding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
+        var refreshing by remember { mutableStateOf(false) }
+        val state = rememberPullRefreshState(
+            refreshing = refreshing,
+            onRefresh = {
+                refreshing = true
+                viewModel.reloadImage()
+                refreshing = false
+            }
+        )
+        Box(
+            modifier = Modifier.pullRefresh(state = state)
         ) {
-            item { AreaGuideContent(data = data) }
+            LazyColumn(
+                modifier = Modifier
+                    .padding(padding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+            ) {
+                item { AreaGuideContent(data = data, reloadImageUiState = reloadImageUiState) }
 
-            val animalDataList = guidesCache.animalData
-            if (animalDataList != null) {
-                items(items = animalDataList) { item ->
-                    if (item.a_location.contains(data.e_name)) {
-                        AnimalGuideCard(
-                            data = item,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clickable {
-                                    navController.navigate("${TaipeiCityZooTourDestinations.ANIMAL_GUIDE_ROUTE}/$item")
-                                }
-                        )
-                        if (item != animalDataList.last()) Divider(thickness = 2.dp)
+                val animalDataList = guidesCache.animalData
+                if (animalDataList != null) {
+                    items(items = animalDataList) { item ->
+                        if (item.a_location.contains(data.e_name)) {
+                            AnimalGuideCard(
+                                reloadImageUiState = reloadImageUiState,
+                                data = item,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .clickable {
+                                        navController.navigate("${TaipeiCityZooTourDestinations.ANIMAL_GUIDE_ROUTE}/$item")
+                                    }
+                            )
+                            if (item != animalDataList.last()) Divider(thickness = 2.dp)
+                        }
                     }
                 }
             }
+
+            PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
         }
     }
 }
