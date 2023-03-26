@@ -33,6 +33,7 @@ var animalData1 = AnimalGuide.Data(
     a_distribution = "臺灣",
     a_feature = "1、 為臺灣特有種鳥類。\\r\\n 2、 最大的特徵就是雄鳥羽冠和背部是鮮明的白色，尾部也有兩根漂亮的白色長羽，為原住民頭上常用的飾羽。",
     a_habitat = "原始林及成熟的次生林，出現於海拔300-2000公尺間",
+    a_location = "鳥園區;臺灣動物區",
     a_name_ch = "藍腹鷴",
     a_name_en = "Swinhoe's Pheasant",
     a_pic01_alt = "藍腹鷴",

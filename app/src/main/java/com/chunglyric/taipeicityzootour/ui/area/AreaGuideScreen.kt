@@ -2,10 +2,8 @@ package com.chunglyric.taipeicityzootour.ui.area
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -29,9 +27,11 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.chunglyric.taipeicityzootour.R
 import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_AREA_DATA_ID
+import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
 import com.chunglyric.taipeicityzootour.model.AreaGuide
+import com.chunglyric.taipeicityzootour.model.GuidesCache
 import com.chunglyric.taipeicityzootour.ui.home.NoImage
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
@@ -97,72 +97,63 @@ fun AreaGuideUrlText(
 }
 
 @Composable
-private fun AreaGuideScreenContent(
-    data: AreaGuide.Data,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier
-    ) {
-        item {
-            ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                val (image, info, memo, category, url, divider) = createRefs()
+fun AnimalGuideCard(data: AreaGuide.Data) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (image, info, memo, category, url, divider) = createRefs()
 
-                AreaGuideImage(
-                    data,
-                    Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .constrainAs(image) {
-                            top.linkTo(parent.top)
-                        }
-                )
+        AreaGuideImage(
+            data,
+            Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .constrainAs(image) {
+                    top.linkTo(parent.top)
+                }
+        )
 
-                Text(
-                    text = data.e_info,
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .constrainAs(info) {
-                            top.linkTo(image.bottom, margin = 8.dp)
-                        }
-                )
+        Text(
+            text = data.e_info,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .constrainAs(info) {
+                    top.linkTo(image.bottom, margin = 8.dp)
+                }
+        )
 
-                if (data._id != INVALID_AREA_DATA_ID) Text(
-                    text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .constrainAs(memo) {
-                            top.linkTo(info.bottom, margin = 8.dp)
-                        }
-                )
+        if (data._id != INVALID_AREA_DATA_ID) Text(
+            text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .constrainAs(memo) {
+                    top.linkTo(info.bottom, margin = 8.dp)
+                }
+        )
 
-                if (data._id != INVALID_AREA_DATA_ID) Text(
-                    text = data.e_category,
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .constrainAs(category) {
-                            top.linkTo(memo.bottom)
-                        }
-                )
+        if (data._id != INVALID_AREA_DATA_ID) Text(
+            text = data.e_category,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .constrainAs(category) {
+                    top.linkTo(memo.bottom)
+                }
+        )
 
-                if (data._id != INVALID_AREA_DATA_ID) AreaGuideUrlText(
-                    data = data,
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp)
-                        .constrainAs(url) {
-                            top.linkTo(memo.bottom)
-                            end.linkTo(parent.end)
-                        }
-                )
+        if (data._id != INVALID_AREA_DATA_ID) AreaGuideUrlText(
+            data = data,
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .constrainAs(url) {
+                    top.linkTo(memo.bottom)
+                    end.linkTo(parent.end)
+                }
+        )
 
-                if (data._id != INVALID_AREA_DATA_ID) Divider(
-                    thickness = 24.dp,
-                    modifier = Modifier
-                        .constrainAs(divider) {
-                            top.linkTo(category.bottom, margin = 8.dp)
-                        }
-                )
-            }
-        }
+        if (data._id != INVALID_AREA_DATA_ID) Divider(
+            thickness = 24.dp,
+            modifier = Modifier
+                .constrainAs(divider) {
+                    top.linkTo(category.bottom, margin = 8.dp)
+                }
+        )
     }
 }
 
@@ -170,6 +161,7 @@ private fun AreaGuideScreenContent(
 @Composable
 fun AreaGuideScreen(
     data: AreaGuide.Data,
+    guidesCache: GuidesCache,
     onGoBack: () -> Unit
 ) {
     val topAppBarState = rememberTopAppBarState()
@@ -192,12 +184,27 @@ fun AreaGuideScreen(
         }
     ) { padding ->
         Modifier.padding(padding)
-        AreaGuideScreenContent(
-            data = data,
+        LazyColumn(
             modifier = Modifier
                 .padding(padding)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-        )
+        ) {
+            item { AnimalGuideCard(data = data) }
+
+            val animalDataList = guidesCache.animalData
+            if (animalDataList != null) {
+                items(items = animalDataList) { item ->
+                    if (item.a_location.contains(data.e_name)) {
+                        AnimalGuideCard(
+                            data = item,
+                            modifier = Modifier
+                                .padding(8.dp)
+                        )
+                        if (item != animalDataList.last()) Divider(thickness = 2.dp)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -205,10 +212,16 @@ fun AreaGuideScreen(
 @Preview("Area guide screen")
 @Composable
 fun AreaGuidePreview() {
+    val guidesCache = GuidesCache()
+    guidesCache.animalData = listOf(
+        animalData1,
+        animalData1
+    )
     TaipeiCityZooTourTheme {
         Surface {
             AreaGuideScreen(
                 data = areaData1,
+                guidesCache = guidesCache,
                 onGoBack = {}
             )
         }
@@ -223,6 +236,7 @@ fun InvalidAreaGuidePreview() {
         Surface {
             AreaGuideScreen(
                 data = invalidAreaData,
+                guidesCache = GuidesCache(),
                 onGoBack = {}
             )
         }

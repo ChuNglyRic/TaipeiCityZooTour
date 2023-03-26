@@ -66,6 +66,7 @@ data class AnimalGuide(
         val a_distribution: String,
         val a_feature: String,
         val a_habitat: String,
+        val a_location: String,
         val a_name_ch: String,
         val a_name_en: String,
         val a_pic01_alt: String,

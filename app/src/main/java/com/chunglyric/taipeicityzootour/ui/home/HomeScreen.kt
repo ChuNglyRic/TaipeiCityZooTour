@@ -97,7 +97,7 @@ fun HomeScreen(
                                         navController.navigate("${TaipeiCityZooTourDestinations.AREA_GUIDE_ROUTE}/$item")
                                     }
                             )
-                            if (item != uiStates.guidesCache?.areaData?.last()) Divider(thickness = 2.dp)
+                            if (item != uiStates.guidesCache.areaData?.last()) Divider(thickness = 2.dp)
                         }
                     }
                 } else {

@@ -57,6 +57,7 @@ fun TaipeiCityZooTourNavGraph(
 
             AreaGuideScreen(
                 data = areaData ?: invalidAreaData,
+                guidesCache = appContainer.guidesCache,
                 onGoBack = { navController.popBackStack() }
             )
         }
