@@ -26,7 +26,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.chunglyric.taipeicityzootour.R
-import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_AREA_DATA_ID
+import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_DATA_ID
 import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
@@ -119,7 +119,7 @@ fun AreaGuideContent(data: AreaGuide.Data) {
                 }
         )
 
-        if (data._id != INVALID_AREA_DATA_ID){
+        if (data._id != INVALID_DATA_ID){
             Text(
                 text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
                 modifier = Modifier

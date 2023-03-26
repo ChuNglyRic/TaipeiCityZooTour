@@ -3,10 +3,10 @@ package com.chunglyric.taipeicityzootour.data.guides.impl
 import com.chunglyric.taipeicityzootour.model.AnimalGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 
-const val INVALID_AREA_DATA_ID = -1
+const val INVALID_DATA_ID = -1
 
 val invalidAreaData = AreaGuide.Data(
-    _id = INVALID_AREA_DATA_ID,
+    _id = INVALID_DATA_ID,
     e_category = "",
     e_info = "請按返回回到上一頁",
     e_memo = "",
