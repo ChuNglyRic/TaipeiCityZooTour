@@ -2,10 +2,14 @@ package com.chunglyric.taipeicityzootour.ui.animal
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,21 +28,24 @@ import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAnimalData
 import com.chunglyric.taipeicityzootour.model.AnimalGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
-import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
-import com.chunglyric.taipeicityzootour.ui.utils.GuideNoImage
+import com.chunglyric.taipeicityzootour.ui.utils.*
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AnimalGuideImage(
+    reloadImageUiState: ReloadImageUiState,
     data: AnimalGuide.Data,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier,
     ) {
         GlideImage(
-            model = data.a_pic01_url.ifEmpty { R.drawable.noimage },
+            model = RebuildUri(
+                url = data.a_pic01_url,
+                reloadImageUiState = reloadImageUiState
+            ).ifEmpty { R.drawable.noimage },
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
@@ -62,13 +69,17 @@ fun spawnContentWithTitle(
 }
 
 @Composable
-fun AnimalGuideCard(data: AnimalGuide.Data) {
+fun AnimalGuideCard(
+    data: AnimalGuide.Data,
+    reloadImageUiState: ReloadImageUiState
+) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (image, title, content, divider) = createRefs()
 
         AnimalGuideImage(
-            data,
-            Modifier
+            reloadImageUiState = reloadImageUiState,
+            data = data,
+            modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(3f / 2f)
                 .padding(start = 8.dp, end = 8.dp)
@@ -127,14 +138,17 @@ fun AnimalGuideCard(data: AnimalGuide.Data) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @ExperimentalMaterial3Api
 @Composable
 fun AnimalGuideScreen(
     data: AnimalGuide.Data,
-    onGoBack: () -> Unit
+    onGoBack: () -> Unit,
+    viewModel: ReloadImageViewModel = ReloadImageViewModel()
 ) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+    val animalGuideUiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -153,12 +167,32 @@ fun AnimalGuideScreen(
         }
     ) { padding ->
         Modifier.padding(padding)
-        LazyColumn(
-            modifier = Modifier
-                .padding(padding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
+        var refreshing by remember { mutableStateOf(false) }
+        val state = rememberPullRefreshState(
+            refreshing = refreshing,
+            onRefresh = {
+                refreshing = true
+                viewModel.reloadImage()
+                refreshing = false
+            }
+        )
+        Box(
+            modifier = Modifier.pullRefresh(state = state)
         ) {
-            item { AnimalGuideCard(data = data) }
+            LazyColumn(
+                modifier = Modifier
+                    .padding(padding)
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+            ) {
+                item {
+                    AnimalGuideCard(
+                        data = data,
+                        animalGuideUiState
+                    )
+                }
+            }
+
+            PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
         }
     }
 }

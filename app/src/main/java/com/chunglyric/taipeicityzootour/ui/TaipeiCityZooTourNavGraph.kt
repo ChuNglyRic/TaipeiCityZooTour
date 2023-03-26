@@ -18,6 +18,7 @@ import com.chunglyric.taipeicityzootour.model.AnimalGuideType
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuideType
 import com.chunglyric.taipeicityzootour.ui.animal.AnimalGuideScreen
+import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageViewModel
 import com.chunglyric.taipeicityzootour.ui.area.AreaGuideScreen
 import com.chunglyric.taipeicityzootour.ui.home.HomeRoute
 import com.chunglyric.taipeicityzootour.ui.home.HomeViewModel
@@ -79,7 +80,8 @@ fun TaipeiCityZooTourNavGraph(
 
             AnimalGuideScreen(
                 data = animalData ?: invalidAnimalData,
-                onGoBack = { navController.popBackStack() }
+                onGoBack = { navController.popBackStack() },
+                viewModel = ReloadImageViewModel()
             )
         }
     }
