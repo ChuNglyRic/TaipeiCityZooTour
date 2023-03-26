@@ -53,12 +53,12 @@ fun spawnContentWithTitle(
     title: String,
     content: String
 ): String {
-    return if (content.isNotEmpty()) "\n\n$title\n${
+    return if (content.isNotEmpty()) "\n$title\n${
         content
             .replace("\\n ", "\\n")
             .replace("\\n", "\n")
             .replace("\\r", "\r")
-    }" else ""
+    }\n" else ""
 }
 
 @Composable
@@ -108,7 +108,7 @@ fun AnimalGuideCard(data: AnimalGuide.Data) {
                             title = stringResource(id = R.string.behavior),
                             content = data.a_behavior
                         ) +
-                        "\n\n${stringResource(id = R.string.latest_updated)}: ${data.a_update}",
+                        "\n${stringResource(id = R.string.latest_updated)}: ${data.a_update}",
                 modifier = Modifier
                     .padding(start = 8.dp, end = 8.dp)
                     .constrainAs(content) {
