@@ -25,6 +25,22 @@ val areaData1 = AreaGuide.Data(
     e_url = "https://www.youtube.com/watch?v=QIUbzZ-jX_Y"
 )
 
+var invalidAnimalData = AnimalGuide.Data(
+    _id = -1,
+    a_alsoknown = "",
+    a_behavior = "",
+    a_crisis = "",
+    a_distribution = "",
+    a_feature = "",
+    a_habitat = "",
+    a_location = "",
+    a_name_ch = "找不到此資料",
+    a_name_en = "請按返回回到上一頁",
+    a_pic01_alt = "",
+    a_pic01_url = "",
+    a_update = ""
+)
+
 var animalData1 = AnimalGuide.Data(
     _id = 1,
     a_alsoknown = "華雞、山雞、畦雞、藍鷳、臺灣藍鷳、斯文豪氏鷴、臺灣山雞",

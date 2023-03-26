@@ -8,4 +8,12 @@
 
     <!-- Area Guide Screen -->
     <string name="open_url">在網頁開啟</string>
+
+    <!-- Animal Guide Screen -->
+    <string name="alias">別名</string>
+    <string name="distribution">地理分布</string>
+    <string name="habitat">棲息地</string>
+    <string name="feature">型態特徵</string>
+    <string name="behavior">生態習性</string>
+    <string name="latest_updated">最後更新</string>
 </resources>
