@@ -1,5 +1,6 @@
 package com.chunglyric.taipeicityzootour.ui.area
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +23,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -32,6 +35,7 @@ import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.GuidesCache
+import com.chunglyric.taipeicityzootour.ui.TaipeiCityZooTourDestinations
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 import com.chunglyric.taipeicityzootour.ui.utils.GuideNoImage
@@ -119,7 +123,7 @@ fun AreaGuideContent(data: AreaGuide.Data) {
                 }
         )
 
-        if (data._id != INVALID_DATA_ID){
+        if (data._id != INVALID_DATA_ID) {
             Text(
                 text = data.e_memo.ifEmpty { stringResource(id = R.string.area_closed_empty) },
                 modifier = Modifier
@@ -164,7 +168,8 @@ fun AreaGuideContent(data: AreaGuide.Data) {
 fun AreaGuideScreen(
     data: AreaGuide.Data,
     guidesCache: GuidesCache,
-    onGoBack: () -> Unit
+    onGoBack: () -> Unit,
+    navController: NavHostController
 ) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
@@ -201,6 +206,9 @@ fun AreaGuideScreen(
                             data = item,
                             modifier = Modifier
                                 .padding(8.dp)
+                                .clickable {
+                                    navController.navigate("${TaipeiCityZooTourDestinations.ANIMAL_GUIDE_ROUTE}/$item")
+                                }
                         )
                         if (item != animalDataList.last()) Divider(thickness = 2.dp)
                     }
@@ -224,7 +232,8 @@ fun AreaGuidePreview() {
             AreaGuideScreen(
                 data = areaData1,
                 guidesCache = guidesCache,
-                onGoBack = {}
+                onGoBack = {},
+                navController = rememberNavController()
             )
         }
     }
@@ -239,7 +248,8 @@ fun InvalidAreaGuidePreview() {
             AreaGuideScreen(
                 data = invalidAreaData,
                 guidesCache = GuidesCache(),
-                onGoBack = {}
+                onGoBack = {},
+                navController = rememberNavController()
             )
         }
     }

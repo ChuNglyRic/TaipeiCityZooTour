@@ -58,6 +58,7 @@ class AreaGuideType : NavType<AreaGuide.Data>(isNullableAllowed = false) {
 data class AnimalGuide(
     val result: Metadata<Data>
 ) {
+    @Parcelize
     data class Data(
         val _id: Int,
         val a_alsoknown: String,
@@ -72,5 +73,27 @@ data class AnimalGuide(
         val a_pic01_alt: String,
         val a_pic01_url: String,
         val a_update: String,
-    )
+    ) : Parcelable {
+        override fun toString(): String {
+            return Uri.encode(Gson().toJson(this))
+        }
+    }
+}
+
+class AnimalGuideType : NavType<AnimalGuide.Data>(isNullableAllowed = false) {
+    override fun get(bundle: Bundle, key: String): AnimalGuide.Data? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            bundle.getParcelable(key, AnimalGuide.Data::class.java)
+        } else {
+            @Suppress("DEPRECATION") bundle.getParcelable(key)
+        }
+    }
+
+    override fun parseValue(value: String): AnimalGuide.Data {
+        return Gson().fromJson(value, AnimalGuide.Data::class.java)
+    }
+
+    override fun put(bundle: Bundle, key: String, value: AnimalGuide.Data) {
+        bundle.putParcelable(key, value)
+    }
 }

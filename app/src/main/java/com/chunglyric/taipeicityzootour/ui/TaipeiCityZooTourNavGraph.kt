@@ -11,9 +11,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.chunglyric.taipeicityzootour.data.AppContainer
+import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAnimalData
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
+import com.chunglyric.taipeicityzootour.model.AnimalGuide
+import com.chunglyric.taipeicityzootour.model.AnimalGuideType
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.AreaGuideType
+import com.chunglyric.taipeicityzootour.ui.animal.AnimalGuideScreen
 import com.chunglyric.taipeicityzootour.ui.area.AreaGuideScreen
 import com.chunglyric.taipeicityzootour.ui.home.HomeRoute
 import com.chunglyric.taipeicityzootour.ui.home.HomeViewModel
@@ -58,6 +62,23 @@ fun TaipeiCityZooTourNavGraph(
             AreaGuideScreen(
                 data = areaData ?: invalidAreaData,
                 guidesCache = appContainer.guidesCache,
+                onGoBack = { navController.popBackStack() },
+                navController = navController
+            )
+        }
+
+        composable(
+            route = "${TaipeiCityZooTourDestinations.ANIMAL_GUIDE_ROUTE}/{animalGuide}",
+            arguments = listOf(navArgument("animalGuide") { type = AnimalGuideType() })
+        ) { navBackStackEntry ->
+            val animalData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                navBackStackEntry.arguments?.getParcelable("animalGuide", AnimalGuide.Data::class.java)
+            } else {
+                @Suppress("DEPRECATION") navBackStackEntry.arguments?.getParcelable("animalGuide")
+            }
+
+            AnimalGuideScreen(
+                data = animalData ?: invalidAnimalData,
                 onGoBack = { navController.popBackStack() }
             )
         }
