@@ -32,9 +32,9 @@ import com.chunglyric.taipeicityzootour.data.guides.impl.areaData1
 import com.chunglyric.taipeicityzootour.data.guides.impl.invalidAreaData
 import com.chunglyric.taipeicityzootour.model.AreaGuide
 import com.chunglyric.taipeicityzootour.model.GuidesCache
-import com.chunglyric.taipeicityzootour.ui.home.NoImage
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
+import com.chunglyric.taipeicityzootour.ui.utils.GuideNoImage
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -45,8 +45,6 @@ fun AreaGuideImage(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(3f / 2f)
     ) {
         GlideImage(
             model = data.e_pic_url.ifEmpty { R.drawable.noimage },
@@ -55,7 +53,7 @@ fun AreaGuideImage(
                 .clip(MaterialTheme.shapes.medium),
             contentScale = ContentScale.Crop,
             loading = placeholder { CenterLoading() },
-            failure = placeholder { NoImage() }
+            failure = placeholder { GuideNoImage() }
         )
     }
 }
@@ -104,6 +102,8 @@ fun AnimalGuideCard(data: AreaGuide.Data) {
         AreaGuideImage(
             data,
             Modifier
+                .fillMaxWidth()
+                .aspectRatio(3f / 2f)
                 .padding(start = 8.dp, end = 8.dp)
                 .constrainAs(image) {
                     top.linkTo(parent.top)
