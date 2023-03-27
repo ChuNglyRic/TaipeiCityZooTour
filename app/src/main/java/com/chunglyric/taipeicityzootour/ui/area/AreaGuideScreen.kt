@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.signature.ObjectKey
 import com.chunglyric.taipeicityzootour.R
 import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_DATA_ID
 import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
@@ -55,17 +56,16 @@ fun AreaGuideImage(
         modifier = modifier
     ) {
         GlideImage(
-            model = RebuildUri(
-                url = data.e_pic_url,
-                reloadImageUiState = reloadImageUiState
-            ).ifEmpty { R.drawable.noimage },
+            model = data.e_pic_url,
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
             contentScale = ContentScale.Crop,
             loading = placeholder { CenterLoading() },
             failure = placeholder { GuideNoImage() }
-        )
+        ) {
+            it.signature(ObjectKey(reloadImageUiState.timestamp))
+        }
     }
 }
 

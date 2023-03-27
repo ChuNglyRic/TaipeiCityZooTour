@@ -22,6 +22,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.signature.ObjectKey
 import com.chunglyric.taipeicityzootour.R
 import com.chunglyric.taipeicityzootour.data.guides.impl.INVALID_DATA_ID
 import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
@@ -35,24 +36,23 @@ import com.chunglyric.taipeicityzootour.ui.utils.*
 fun AnimalGuideImage(
     reloadImageUiState: ReloadImageUiState,
     data: AnimalGuide.Data,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier,
+        modifier = modifier
     ) {
         GlideImage(
-            model = RebuildUri(
-                url = data.a_pic01_url,
-                reloadImageUiState = reloadImageUiState
-            ).ifEmpty { R.drawable.noimage },
+            model = data.a_pic01_url,
             contentDescription = null,
             modifier = Modifier
                 .clip(MaterialTheme.shapes.medium),
             contentScale = ContentScale.Crop,
             loading = placeholder { CenterLoading() },
             failure = placeholder { GuideNoImage() }
-        )
+        ) {
+            it.signature(ObjectKey(reloadImageUiState.timestamp))
+        }
     }
 }
 

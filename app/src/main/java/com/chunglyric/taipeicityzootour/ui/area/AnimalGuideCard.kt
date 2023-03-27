@@ -11,7 +11,6 @@ import androidx.constraintlayout.compose.Dimension
 import com.chunglyric.taipeicityzootour.data.guides.impl.animalData1
 import com.chunglyric.taipeicityzootour.model.AnimalGuide
 import com.chunglyric.taipeicityzootour.ui.theme.TaipeiCityZooTourTheme
-import com.chunglyric.taipeicityzootour.ui.utils.RebuildUri
 import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageUiState
 import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideContent
 import com.chunglyric.taipeicityzootour.ui.utils.guidecard.GuideForwardButton
@@ -28,10 +27,8 @@ fun AnimalGuideCard(
         val (image, right, group, title, info, forward) = createRefs()
 
         GuideImage(
-            url = RebuildUri(
-                url = data.a_pic01_url,
-                reloadImageUiState = reloadImageUiState
-            ),
+            reloadImageUiState = reloadImageUiState,
+            url = data.a_pic01_url,
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(image) {

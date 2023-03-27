@@ -12,12 +12,15 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.signature.ObjectKey
 import com.chunglyric.taipeicityzootour.ui.utils.CenterLoading
 import com.chunglyric.taipeicityzootour.ui.utils.GuideNoImage
+import com.chunglyric.taipeicityzootour.ui.utils.ReloadImageUiState
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun GuideImage(
+    reloadImageUiState: ReloadImageUiState? = null,
     url: String,
     modifier: Modifier = Modifier
 ) {
@@ -34,6 +37,8 @@ fun GuideImage(
             contentScale = ContentScale.Crop,
             loading = placeholder { CenterLoading() },
             failure = placeholder { GuideNoImage() }
-        )
+        ) {
+            if (reloadImageUiState?.timestamp != null) it.signature(ObjectKey(reloadImageUiState.timestamp)) else it
+        }
     }
 }
