@@ -5,6 +5,7 @@
 
     <!-- Home Screen -->
     <string name="area_closed_empty">無休館資訊</string>
+    <string name="nothing_here">目前尚未實作功能</string>
 
     <!-- Area Guide Screen -->
     <string name="open_url">在網頁開啟</string>
