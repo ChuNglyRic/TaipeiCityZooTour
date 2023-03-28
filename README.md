@@ -14,3 +14,6 @@ Kotlin data class
 Retrofit  
 Glide  
 Gson
+
+# 單元測試部分
+ApiGuidesRepository
